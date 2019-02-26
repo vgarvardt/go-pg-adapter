@@ -1,4 +1,4 @@
-package sql_adapter
+package sqladapter
 
 import (
 	"database/sql"
@@ -54,7 +54,7 @@ type TestRow struct {
 	Data      string    `db:"data"`
 }
 
-func runTests(t *testing.T, adapter pg_adapter.Adapter, table string) {
+func runTests(t *testing.T, adapter pgadapter.Adapter, table string) {
 	query := fmt.Sprintf(`
 CREATE TABLE %[1]s (
   id         SERIAL      NOT NULL,
@@ -84,5 +84,5 @@ CREATE TABLE %[1]s (
 	var unusedRow TestRow
 	err = adapter.SelectOne(&unusedRow, fmt.Sprintf("SELECT * FROM %s WHERE data = $1", table), "foo bar")
 	require.Error(t, err)
-	assert.Equal(t, err, pg_adapter.ErrNoRows)
+	assert.Equal(t, err, pgadapter.ErrNoRows)
 }

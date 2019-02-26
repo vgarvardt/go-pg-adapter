@@ -1,4 +1,4 @@
-package pg_adapter
+package pgadapter
 
 import "errors"
 

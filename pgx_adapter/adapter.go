@@ -1,4 +1,4 @@
-package pgx_adapter
+package pgxadapter
 
 import (
 	"github.com/jackc/pgx"
@@ -37,7 +37,7 @@ func (a *ConnPool) SelectOne(dst interface{}, query string, args ...interface{})
 	row := a.conn.QueryRow(query, args...)
 	if err := pgxHelpers.ScanStruct(row, dst); err != nil {
 		if err == pgx.ErrNoRows {
-			return pg_adapter.ErrNoRows
+			return pgadapter.ErrNoRows
 		}
 		return err
 	}
@@ -56,7 +56,7 @@ func (a *Conn) SelectOne(dst interface{}, query string, args ...interface{}) err
 	row := a.conn.QueryRow(query, args...)
 	if err := pgxHelpers.ScanStruct(row, dst); err != nil {
 		if err == pgx.ErrNoRows {
-			return pg_adapter.ErrNoRows
+			return pgadapter.ErrNoRows
 		}
 		return err
 	}
