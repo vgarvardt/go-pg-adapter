@@ -22,7 +22,7 @@ type Adapter interface {
 ## Install
 
 ```bash
-$ go get -u -v github.com/vgarvardt/go-oauth2-pg
+$ go get -u -v github.com/vgarvardt/go-pg-adapter
 ```
 
 ## PostgreSQL drivers
