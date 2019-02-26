@@ -1,4 +1,4 @@
-package sql_adapter
+package sqladapter
 
 import (
 	"database/sql"
@@ -32,7 +32,7 @@ func (a *Adapter) Exec(query string, args ...interface{}) error {
 func (a *Adapter) SelectOne(dst interface{}, query string, args ...interface{}) error {
 	if err := a.conn.Get(dst, query, args...); err != nil {
 		if err == sql.ErrNoRows {
-			return pg_adapter.ErrNoRows
+			return pgadapter.ErrNoRows
 		}
 		return err
 	}

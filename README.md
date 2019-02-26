@@ -29,10 +29,10 @@ $ go get -u -v github.com/vgarvardt/go-oauth2-pg
 
 The package bundles the following adapter implementations:
 
-- `database/sql` (e.g. [`github.com/lib/pq`](https://github.com/lib/pq)) - `github.com/vgarvardt/go-pg-adapter/sql_adapter.New()`
-- [`github.com/jmoiron/sqlx.DB`](https://github.com/jmoiron/sqlx) - `github.com/vgarvardt/go-pg-adapter/sql_adapter.NewX()`
-- [`github.com/jackc/pgx.Conn`](https://github.com/jackc/pgx) - `github.com/vgarvardt/go-pg-adapter/pgx_adapter.NewConn()`
-- [`github.com/jackc/pgx.ConnPool`](https://github.com/jackc/pgx) - `github.com/vgarvardt/go-pg-adapter/pgx_adapter.NewConnPool()`
+- `database/sql` (e.g. [`github.com/lib/pq`](https://github.com/lib/pq)) - `github.com/vgarvardt/go-pg-adapter/sqladapter.New()`
+- [`github.com/jmoiron/sqlx.DB`](https://github.com/jmoiron/sqlx) - `github.com/vgarvardt/go-pg-adapter/sqladapter.NewX()`
+- [`github.com/jackc/pgx.Conn`](https://github.com/jackc/pgx) - `github.com/vgarvardt/go-pg-adapter/pgxadapter.NewConn()`
+- [`github.com/jackc/pgx.ConnPool`](https://github.com/jackc/pgx) - `github.com/vgarvardt/go-pg-adapter/pgxadapter.NewConnPool()`
 
 ## How to run tests
 
