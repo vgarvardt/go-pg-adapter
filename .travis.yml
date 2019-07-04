@@ -18,7 +18,7 @@ env:
 
 before_install:
   - psql -c 'create database pgadapter;' -U postgres
-  - go mod vendor
+  - env GO111MODULE=on go mod vendor
 
 script:
   - go test -coverprofile=coverage.txt -covermode=atomic ./...
