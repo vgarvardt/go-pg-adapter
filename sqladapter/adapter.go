@@ -59,12 +59,17 @@ func (a *Conn) Exec(query string, args ...interface{}) error {
 
 // SelectOne runs a select query and scans the object into a struct or returns an error
 func (a *Conn) SelectOne(dst interface{}, query string, args ...interface{}) error {
-	if err := a.conn.QueryRowContext(context.Background(), query, args...).Scan(dst); err != nil {
-		if err == sql.ErrNoRows {
-			return pgadapter.ErrNoRows
-		}
+	// QueryRowContext does not work here as Row has very limited usage, we'll handle single scan logic manually
+	rows, err := a.conn.QueryContext(context.Background(), query, args...)
+	if err != nil {
 		return err
 	}
 
-	return nil
+	defer rows.Close()
+
+	if !rows.Next() {
+		return pgadapter.ErrNoRows
+	}
+
+	return scanStruct(rows, dst)
 }
