@@ -72,7 +72,7 @@ CREATE TABLE %[1]s (
 
 	originalRow := TestRow{
 		CreatedAt: time.Now(),
-		Data:      time.Now().Format(time.RFC1123),
+		Data:      time.Now().Format(time.RFC3339Nano),
 	}
 	err = adapter.Exec(fmt.Sprintf("INSERT INTO %s (created_at, data) VALUES ($1, $2)", table), originalRow.CreatedAt, originalRow.Data)
 	require.NoError(t, err)

@@ -1,6 +1,7 @@
 package sqladapter
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"os"
@@ -26,26 +27,44 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-func TestNewConn(t *testing.T) {
-	conn, err := sql.Open("pgx", uri)
+func TestNew(t *testing.T) {
+	db, err := sql.Open("pgx", uri)
 	require.NoError(t, err)
 
 	defer func() {
-		assert.NoError(t, conn.Close())
+		assert.NoError(t, db.Close())
 	}()
 
-	runTests(t, New(conn), fmt.Sprintf("test_sql_%d", time.Now().UnixNano()))
+	runTests(t, New(db), fmt.Sprintf("test_sql_%d", time.Now().UnixNano()))
 }
 
-func TestNewConnPool(t *testing.T) {
-	conn, err := sql.Open("pgx", uri)
+func TestNewX(t *testing.T) {
+	db, err := sql.Open("pgx", uri)
+	require.NoError(t, err)
+
+	defer func() {
+		assert.NoError(t, db.Close())
+	}()
+
+	runTests(t, NewX(sqlx.NewDb(db, "")), fmt.Sprintf("test_sqlx_%d", time.Now().UnixNano()))
+}
+
+func TestNewConn(t *testing.T) {
+	db, err := sql.Open("pgx", uri)
+	require.NoError(t, err)
+
+	defer func() {
+		assert.NoError(t, db.Close())
+	}()
+
+	conn, err := db.Conn(context.Background())
 	require.NoError(t, err)
 
 	defer func() {
 		assert.NoError(t, conn.Close())
 	}()
 
-	runTests(t, NewX(sqlx.NewDb(conn, "")), fmt.Sprintf("test_sqlx_%d", time.Now().UnixNano()))
+	runTests(t, NewConn(conn), fmt.Sprintf("test_conn_%d", time.Now().UnixNano()))
 }
 
 type TestRow struct {
@@ -67,7 +86,7 @@ CREATE TABLE %[1]s (
 
 	originalRow := TestRow{
 		CreatedAt: time.Now(),
-		Data:      time.Now().Format(time.RFC1123),
+		Data:      time.Now().Format(time.RFC3339Nano),
 	}
 	err = adapter.Exec(fmt.Sprintf("INSERT INTO %s (created_at, data) VALUES ($1, $2)", table), originalRow.CreatedAt, originalRow.Data)
 	require.NoError(t, err)
