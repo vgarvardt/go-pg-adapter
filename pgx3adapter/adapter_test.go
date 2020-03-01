@@ -1,6 +1,7 @@
-package pgxadapter
+package pgx3adapter
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"testing"
@@ -9,6 +10,7 @@ import (
 	"github.com/jackc/pgx"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
 	"github.com/vgarvardt/go-pg-adapter"
 )
 
@@ -60,6 +62,8 @@ type TestRow struct {
 }
 
 func runTests(t *testing.T, adapter pgadapter.Adapter, table string) {
+	t.Helper()
+
 	query := fmt.Sprintf(`
 CREATE TABLE %[1]s (
   id         SERIAL      NOT NULL,
@@ -67,18 +71,18 @@ CREATE TABLE %[1]s (
   data       TEXT        NOT NULL,
   CONSTRAINT %[1]s_pkey PRIMARY KEY (id)
 )`, table)
-	err := adapter.Exec(query)
+	err := adapter.Exec(context.TODO(), query)
 	require.NoError(t, err)
 
 	originalRow := TestRow{
 		CreatedAt: time.Now(),
 		Data:      time.Now().Format(time.RFC3339Nano),
 	}
-	err = adapter.Exec(fmt.Sprintf("INSERT INTO %s (created_at, data) VALUES ($1, $2)", table), originalRow.CreatedAt, originalRow.Data)
+	err = adapter.Exec(context.TODO(), fmt.Sprintf("INSERT INTO %s (created_at, data) VALUES ($1, $2)", table), originalRow.CreatedAt, originalRow.Data)
 	require.NoError(t, err)
 
 	var selectedRow TestRow
-	err = adapter.SelectOne(&selectedRow, fmt.Sprintf("SELECT * FROM %s WHERE data = $1", table), originalRow.Data)
+	err = adapter.SelectOne(context.TODO(), &selectedRow, fmt.Sprintf("SELECT * FROM %s WHERE data = $1", table), originalRow.Data)
 	require.NoError(t, err)
 
 	assert.True(t, selectedRow.ID > 0)
@@ -87,7 +91,7 @@ CREATE TABLE %[1]s (
 	assert.Equal(t, originalRow.Data, selectedRow.Data)
 
 	var unusedRow TestRow
-	err = adapter.SelectOne(&unusedRow, fmt.Sprintf("SELECT * FROM %s WHERE data = $1", table), "foo bar")
+	err = adapter.SelectOne(context.TODO(), &unusedRow, fmt.Sprintf("SELECT * FROM %s WHERE data = $1", table), "foo bar")
 	require.Error(t, err)
 	assert.Equal(t, err, pgadapter.ErrNoRows)
 }

@@ -5,6 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/jmoiron/sqlx"
+
 	"github.com/vgarvardt/go-pg-adapter"
 )
 
@@ -34,14 +35,14 @@ func NewConn(conn *sql.Conn) *Conn {
 }
 
 // Exec runs a query and returns an error if any
-func (a *DB) Exec(query string, args ...interface{}) error {
-	_, err := a.db.Exec(query, args...)
+func (a *DB) Exec(ctx context.Context, query string, args ...interface{}) error {
+	_, err := a.db.ExecContext(ctx, query, args...)
 	return err
 }
 
 // SelectOne runs a select query and scans the object into a struct or returns an error
-func (a *DB) SelectOne(dst interface{}, query string, args ...interface{}) error {
-	if err := a.db.Get(dst, query, args...); err != nil {
+func (a *DB) SelectOne(ctx context.Context, dst interface{}, query string, args ...interface{}) error {
+	if err := a.db.GetContext(ctx, dst, query, args...); err != nil {
 		if err == sql.ErrNoRows {
 			return pgadapter.ErrNoRows
 		}
@@ -52,15 +53,15 @@ func (a *DB) SelectOne(dst interface{}, query string, args ...interface{}) error
 }
 
 // Exec runs a query and returns an error if any
-func (a *Conn) Exec(query string, args ...interface{}) error {
-	_, err := a.conn.ExecContext(context.Background(), query, args...)
+func (a *Conn) Exec(ctx context.Context, query string, args ...interface{}) error {
+	_, err := a.conn.ExecContext(ctx, query, args...)
 	return err
 }
 
 // SelectOne runs a select query and scans the object into a struct or returns an error
-func (a *Conn) SelectOne(dst interface{}, query string, args ...interface{}) error {
+func (a *Conn) SelectOne(ctx context.Context, dst interface{}, query string, args ...interface{}) error {
 	// QueryRowContext does not work here as Row has very limited usage, we'll handle single scan logic manually
-	rows, err := a.conn.QueryContext(context.Background(), query, args...)
+	rows, err := a.conn.QueryContext(ctx, query, args...)
 	if err != nil {
 		return err
 	}

@@ -1,15 +1,14 @@
-package sqladapter
+package pgx3adapter
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"os"
 	"testing"
 	"time"
 
-	_ "github.com/jackc/pgx/stdlib"
-	"github.com/jmoiron/sqlx"
+	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -28,44 +27,25 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-func TestNew(t *testing.T) {
-	db, err := sql.Open("pgx", uri)
-	require.NoError(t, err)
-
-	defer func() {
-		assert.NoError(t, db.Close())
-	}()
-
-	runTests(t, New(db), fmt.Sprintf("test_sql_%d", time.Now().UnixNano()))
-}
-
-func TestNewX(t *testing.T) {
-	db, err := sql.Open("pgx", uri)
-	require.NoError(t, err)
-
-	defer func() {
-		assert.NoError(t, db.Close())
-	}()
-
-	runTests(t, NewX(sqlx.NewDb(db, "")), fmt.Sprintf("test_sqlx_%d", time.Now().UnixNano()))
-}
-
 func TestNewConn(t *testing.T) {
-	db, err := sql.Open("pgx", uri)
+	pgxConn, err := pgx.Connect(context.TODO(), uri)
 	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	defer func() {
-		assert.NoError(t, db.Close())
+		assert.NoError(t, pgxConn.Close(context.TODO()))
 	}()
 
-	conn, err := db.Conn(context.Background())
+	runTests(t, NewConn(pgxConn), fmt.Sprintf("test_pgx_conn_%d", time.Now().UnixNano()))
+}
+
+func TestNewConnPool(t *testing.T) {
+	pgXConnPool, err := pgxpool.Connect(context.TODO(), uri)
 	require.NoError(t, err)
 
-	defer func() {
-		assert.NoError(t, conn.Close())
-	}()
+	defer pgXConnPool.Close()
 
-	runTests(t, NewConn(conn), fmt.Sprintf("test_conn_%d", time.Now().UnixNano()))
+	runTests(t, NewPool(pgXConnPool), fmt.Sprintf("test_pgx_conn_pool_%d", time.Now().UnixNano()))
 }
 
 type TestRow struct {
