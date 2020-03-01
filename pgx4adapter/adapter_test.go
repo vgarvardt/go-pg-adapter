@@ -1,4 +1,4 @@
-package pgx3adapter
+package pgx4adapter
 
 import (
 	"context"
