@@ -5,17 +5,25 @@
 Simple adapter interface and implementations for different PostgreSQL drivers for Go.
 
 ```go
-package pg_adapter
+package pgadapter
 
-import "errors"
+import (
+	"context"
+	"errors"
+)
 
-// ErrNoRows is the driver-agnostic error returned when no record is found
-var ErrNoRows = errors.New("sql: no rows in result set")
+var (
+	// ErrNoRows is the driver-agnostic error returned when no record is found
+	ErrNoRows = errors.New("sql: no rows in result set")
+	// ErrManyRows is the driver-agnostic error returned when more than one record is found
+	// while only one was expected
+	ErrManyRows = errors.New("sql: more than one row in result set")
+)
 
 // Adapter represents DB access layer interface for different PostgreSQL drivers
 type Adapter interface {
-	Exec(query string, args ...interface{}) error
-	SelectOne(dst interface{}, query string, args ...interface{}) error
+	Exec(ctx context.Context, query string, args ...interface{}) error
+	SelectOne(ctx context.Context, dst interface{}, query string, args ...interface{}) error
 }
 ```
 
@@ -32,8 +40,10 @@ The package bundles the following adapter implementations:
 - `database/sql.DB` (e.g. [`github.com/lib/pq`](https://github.com/lib/pq)) - `github.com/vgarvardt/go-pg-adapter/sqladapter.New()`
 - `database/sql.Conn` (e.g. [`github.com/lib/pq`](https://github.com/lib/pq)) - `github.com/vgarvardt/go-pg-adapter/sqladapter.NewConn()`
 - [`github.com/jmoiron/sqlx.DB`](https://github.com/jmoiron/sqlx) - `github.com/vgarvardt/go-pg-adapter/sqladapter.NewX()`
-- [`github.com/jackc/pgx.Conn`](https://github.com/jackc/pgx) - `github.com/vgarvardt/go-pg-adapter/pgxadapter.NewConn()`
-- [`github.com/jackc/pgx.ConnPool`](https://github.com/jackc/pgx) - `github.com/vgarvardt/go-pg-adapter/pgxadapter.NewConnPool()`
+- [`github.com/jackc/pgx.Conn`](https://github.com/jackc/pgx) (pgx v3) - `github.com/vgarvardt/go-pg-adapter/pgx3adapter.NewConn()`
+- [`github.com/jackc/pgx.ConnPool`](https://github.com/jackc/pgx) (pgx v3) - `github.com/vgarvardt/go-pg-adapter/pgx3adapter.NewConnPool()`
+- [`github.com/jackc/pgx/v4.Conn`](https://github.com/jackc/pgx) (pgx v4) - `github.com/vgarvardt/go-pg-adapter/pgx4adapter.NewConn()`
+- [`github.com/jackc/pgx/v4/pgxpool.Pool`](https://github.com/jackc/pgx) (pgx v4) - `github.com/vgarvardt/go-pg-adapter/pgx4adapter.NewPool()`
 
 ## How to run tests
 
@@ -46,7 +56,7 @@ docker run --rm -p 5432:5432 -it -e POSTGRES_PASSWORD=pgadapter -e POSTGRES_USER
 Now you can run tests using the running PostgreSQL instance using `PG_URI` environment variable
 
 ```bash
-PG_URI=postgres://pgadapter:pgadapter@localhost:5432/oauth2?sslmode=disable go test -cover ./...
+PG_URI=postgres://pgadapter:pgadapter@localhost:5432/pgadapter?sslmode=disable go test -cover ./...
 ```
 
 ## MIT License

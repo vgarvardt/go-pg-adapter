@@ -1,9 +1,12 @@
-package pgxadapter
+package pgx3adapter
 
 import (
+	"context"
+
 	"github.com/jackc/pgx"
-	"github.com/vgarvardt/go-pg-adapter"
 	pgxHelpers "github.com/vgarvardt/pgx-helpers"
+
+	"github.com/vgarvardt/go-pg-adapter"
 )
 
 // ConnPool is the adapter type for PGx connection pool connection type
@@ -27,14 +30,14 @@ func NewConn(conn *pgx.Conn) *Conn {
 }
 
 // Exec runs a query and returns an error if any
-func (a *ConnPool) Exec(query string, args ...interface{}) error {
-	_, err := a.conn.Exec(query, args...)
+func (a *ConnPool) Exec(ctx context.Context, query string, args ...interface{}) error {
+	_, err := a.conn.ExecEx(ctx, query, nil, args...)
 	return err
 }
 
 // SelectOne runs a select query and scans the object into a struct or returns an error
-func (a *ConnPool) SelectOne(dst interface{}, query string, args ...interface{}) error {
-	row := a.conn.QueryRow(query, args...)
+func (a *ConnPool) SelectOne(ctx context.Context, dst interface{}, query string, args ...interface{}) error {
+	row := a.conn.QueryRowEx(ctx, query, nil, args...)
 	if err := pgxHelpers.ScanStruct(row, dst); err != nil {
 		if err == pgx.ErrNoRows {
 			return pgadapter.ErrNoRows
@@ -46,14 +49,14 @@ func (a *ConnPool) SelectOne(dst interface{}, query string, args ...interface{})
 }
 
 // Exec runs a query and returns an error if any
-func (a *Conn) Exec(query string, args ...interface{}) error {
-	_, err := a.conn.Exec(query, args...)
+func (a *Conn) Exec(ctx context.Context, query string, args ...interface{}) error {
+	_, err := a.conn.ExecEx(ctx, query, nil, args...)
 	return err
 }
 
 // SelectOne runs a select query and scans the object into a struct or returns an error
-func (a *Conn) SelectOne(dst interface{}, query string, args ...interface{}) error {
-	row := a.conn.QueryRow(query, args...)
+func (a *Conn) SelectOne(ctx context.Context, dst interface{}, query string, args ...interface{}) error {
+	row := a.conn.QueryRowEx(ctx, query, nil, args...)
 	if err := pgxHelpers.ScanStruct(row, dst); err != nil {
 		if err == pgx.ErrNoRows {
 			return pgadapter.ErrNoRows
