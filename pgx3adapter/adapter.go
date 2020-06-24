@@ -6,7 +6,7 @@ import (
 	"github.com/jackc/pgx"
 	pgxHelpers "github.com/vgarvardt/pgx-helpers"
 
-	"github.com/vgarvardt/go-pg-adapter"
+	pgAdapter "github.com/vgarvardt/go-pg-adapter"
 )
 
 // ConnPool is the adapter type for PGx connection pool connection type
@@ -40,7 +40,7 @@ func (a *ConnPool) SelectOne(ctx context.Context, dst interface{}, query string,
 	row := a.conn.QueryRowEx(ctx, query, nil, args...)
 	if err := pgxHelpers.ScanStruct(row, dst); err != nil {
 		if err == pgx.ErrNoRows {
-			return pgadapter.ErrNoRows
+			return pgAdapter.ErrNoRows
 		}
 		return err
 	}
@@ -59,7 +59,7 @@ func (a *Conn) SelectOne(ctx context.Context, dst interface{}, query string, arg
 	row := a.conn.QueryRowEx(ctx, query, nil, args...)
 	if err := pgxHelpers.ScanStruct(row, dst); err != nil {
 		if err == pgx.ErrNoRows {
-			return pgadapter.ErrNoRows
+			return pgAdapter.ErrNoRows
 		}
 		return err
 	}

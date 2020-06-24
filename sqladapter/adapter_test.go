@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/vgarvardt/go-pg-adapter"
+	pgAdapter "github.com/vgarvardt/go-pg-adapter"
 )
 
 var uri string
@@ -74,7 +74,7 @@ type TestRow struct {
 	Data      string    `db:"data"`
 }
 
-func runTests(t *testing.T, adapter pgadapter.Adapter, table string) {
+func runTests(t *testing.T, adapter pgAdapter.Adapter, table string) {
 	t.Helper()
 
 	query := fmt.Sprintf(`
@@ -106,5 +106,5 @@ CREATE TABLE %[1]s (
 	var unusedRow TestRow
 	err = adapter.SelectOne(context.TODO(), &unusedRow, fmt.Sprintf("SELECT * FROM %s WHERE data = $1", table), "foo bar")
 	require.Error(t, err)
-	assert.Equal(t, err, pgadapter.ErrNoRows)
+	assert.Equal(t, err, pgAdapter.ErrNoRows)
 }

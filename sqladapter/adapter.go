@@ -6,7 +6,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
-	"github.com/vgarvardt/go-pg-adapter"
+	pgAdapter "github.com/vgarvardt/go-pg-adapter"
 )
 
 // DB is the adapter type for sqlx.DB connection type
@@ -30,6 +30,7 @@ type Conn struct {
 	conn *sql.Conn
 }
 
+// NewConn instantiated and returns adapter type for sql.Conn connection type
 func NewConn(conn *sql.Conn) *Conn {
 	return &Conn{conn}
 }
@@ -44,7 +45,7 @@ func (a *DB) Exec(ctx context.Context, query string, args ...interface{}) error 
 func (a *DB) SelectOne(ctx context.Context, dst interface{}, query string, args ...interface{}) error {
 	if err := a.db.GetContext(ctx, dst, query, args...); err != nil {
 		if err == sql.ErrNoRows {
-			return pgadapter.ErrNoRows
+			return pgAdapter.ErrNoRows
 		}
 		return err
 	}
@@ -69,7 +70,7 @@ func (a *Conn) SelectOne(ctx context.Context, dst interface{}, query string, arg
 	defer rows.Close()
 
 	if !rows.Next() {
-		return pgadapter.ErrNoRows
+		return pgAdapter.ErrNoRows
 	}
 
 	return scanStruct(rows, dst)

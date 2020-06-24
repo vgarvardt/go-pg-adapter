@@ -8,7 +8,7 @@ import (
 
 	pgxHelpers "github.com/vgarvardt/pgx-helpers/v4"
 
-	"github.com/vgarvardt/go-pg-adapter"
+	pgAdapter "github.com/vgarvardt/go-pg-adapter"
 )
 
 // Pool is the adapter type for PGx pool connection type
@@ -53,11 +53,11 @@ func (a *Pool) SelectOne(ctx context.Context, dst interface{}, query string, arg
 	})
 
 	if rowScanned > 1 {
-		return pgadapter.ErrManyRows
+		return pgAdapter.ErrManyRows
 	}
 
 	if rowScanned == 0 || err == pgx.ErrNoRows {
-		return pgadapter.ErrNoRows
+		return pgAdapter.ErrNoRows
 	}
 
 	return err
@@ -85,11 +85,11 @@ func (a *Conn) SelectOne(ctx context.Context, dst interface{}, query string, arg
 	})
 
 	if rowScanned > 1 {
-		return pgadapter.ErrManyRows
+		return pgAdapter.ErrManyRows
 	}
 
 	if rowScanned == 0 || err == pgx.ErrNoRows {
-		return pgadapter.ErrNoRows
+		return pgAdapter.ErrNoRows
 	}
 
 	return err
