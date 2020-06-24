@@ -1,6 +1,9 @@
 # go-pg-adapter
 
-[![Build][Build-Status-Image]][Build-Status-Url] [![Codecov][codecov-image]][codecov-url] [![ReportCard][reportcard-image]][reportcard-url] [![GoDoc][godoc-image]][godoc-url] [![License][license-image]][license-url]
+[![GoDoc](https://godoc.org/github.com/vgarvardt/go-pg-adapter?status.svg)](https://godoc.org/github.com/vgarvardt/go-pg-adapter)
+[![Coverage Status](https://codecov.io/gh/vgarvardt/go-pg-adapter/branch/master/graph/badge.svg)](https://codecov.io/gh/vgarvardt/go-pg-adapter)
+[![ReportCard](https://goreportcard.com/badge/github.com/vgarvardt/go-pg-adapter)](https://goreportcard.com/report/github.com/vgarvardt/go-pg-adapter)
+[![License](https://img.shields.io/npm/l/express.svg)](http://opensource.org/licenses/MIT)
 
 Simple adapter interface and implementations for different PostgreSQL drivers for Go.
 
@@ -45,33 +48,19 @@ The package bundles the following adapter implementations:
 - [`github.com/jackc/pgx/v4.Conn`](https://github.com/jackc/pgx) (pgx v4) - `github.com/vgarvardt/go-pg-adapter/pgx4adapter.NewConn()`
 - [`github.com/jackc/pgx/v4/pgxpool.Pool`](https://github.com/jackc/pgx) (pgx v4) - `github.com/vgarvardt/go-pg-adapter/pgx4adapter.NewPool()`
 
-## How to run tests
+## Testing
 
-You will need running PostgreSQL instance. E.g. the one running in docker and exposing a port to a host system
+Linter and tests are running for every Pul Request, but it is possible to run linter
+and tests locally using `docker` and `make`.
 
-```bash
-docker run --rm -p 5432:5432 -it -e POSTGRES_PASSWORD=pgadapter -e POSTGRES_USER=pgadapter -e POSTGRES_DB=pgadapter postgres:10
-```
+Run linter: `make link`. This command runs liner in docker container with the project
+source code mounted.
 
-Now you can run tests using the running PostgreSQL instance using `PG_URI` environment variable
-
-```bash
-PG_URI=postgres://pgadapter:pgadapter@localhost:5432/pgadapter?sslmode=disable go test -cover ./...
-```
+Run tests: `make test`. This command runs project dependencies in docker containers
+if they are not started yet and runs go tests with coverage.
 
 ## MIT License
 
 ```
-Copyright (c) 2019 Vladimir Garvardt
+Copyright (c) 2020 Vladimir Garvardt
 ```
-
-[Build-Status-Url]: https://travis-ci.org/vgarvardt/go-pg-adapter
-[Build-Status-Image]: https://travis-ci.org/vgarvardt/go-pg-adapter.svg?branch=master
-[codecov-url]: https://codecov.io/gh/vgarvardt/go-pg-adapter
-[codecov-image]: https://codecov.io/gh/vgarvardt/go-pg-adapter/branch/master/graph/badge.svg
-[reportcard-url]: https://goreportcard.com/report/github.com/vgarvardt/go-pg-adapter
-[reportcard-image]: https://goreportcard.com/badge/github.com/vgarvardt/go-pg-adapter
-[godoc-url]: https://godoc.org/github.com/vgarvardt/go-pg-adapter
-[godoc-image]: https://godoc.org/github.com/vgarvardt/go-pg-adapter?status.svg
-[license-url]: http://opensource.org/licenses/MIT
-[license-image]: https://img.shields.io/npm/l/express.svg
