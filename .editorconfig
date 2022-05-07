@@ -18,8 +18,8 @@ ij_formatter_tags_enabled = true
 indent_size = 2
 trim_trailing_whitespace = false
 
-[*.{yml,yaml,raml,yml.dist,yml.hbs}]
+[*.{yml,yaml,raml,yml.dist,yml.hbs,json}]
 indent_size = 2
 
-[*.go]
+[{*.go,go.mod}]
 indent_style = tab
