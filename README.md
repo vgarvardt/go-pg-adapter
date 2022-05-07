@@ -33,7 +33,7 @@ type Adapter interface {
 ## Install
 
 ```bash
-$ go get -u -v github.com/vgarvardt/go-pg-adapter
+go get -u -v github.com/vgarvardt/go-pg-adapter
 ```
 
 ## PostgreSQL drivers
@@ -60,9 +60,7 @@ go tests with coverage.
 
 ## MIT License
 
-```
 Copyright (c) 2020 Vladimir Garvardt
-```
 
 <!-- @formatter:off -->
 [`github.com/lib/pq`]: https://github.com/lib/pq
