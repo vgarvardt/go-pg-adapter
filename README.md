@@ -11,22 +11,22 @@ Simple adapter interface and implementations for different PostgreSQL drivers fo
 package pgadapter
 
 import (
-	"context"
-	"errors"
+  "context"
+  "errors"
 )
 
 var (
-	// ErrNoRows is the driver-agnostic error returned when no record is found
-	ErrNoRows = errors.New("sql: no rows in result set")
-	// ErrManyRows is the driver-agnostic error returned when more than one record is found
-	// while only one was expected
-	ErrManyRows = errors.New("sql: more than one row in result set")
+  // ErrNoRows is the driver-agnostic error returned when no record is found
+  ErrNoRows = errors.New("sql: no rows in result set")
+  // ErrManyRows is the driver-agnostic error returned when more than one record is found
+  // while only one was expected
+  ErrManyRows = errors.New("sql: more than one row in result set")
 )
 
 // Adapter represents DB access layer interface for different PostgreSQL drivers
 type Adapter interface {
-	Exec(ctx context.Context, query string, args ...interface{}) error
-	SelectOne(ctx context.Context, dst interface{}, query string, args ...interface{}) error
+  Exec(ctx context.Context, query string, args ...interface{}) error
+  SelectOne(ctx context.Context, dst interface{}, query string, args ...interface{}) error
 }
 ```
 
@@ -40,27 +40,34 @@ $ go get -u -v github.com/vgarvardt/go-pg-adapter
 
 The package bundles the following adapter implementations:
 
-- `database/sql.DB` (e.g. [`github.com/lib/pq`](https://github.com/lib/pq)) - `github.com/vgarvardt/go-pg-adapter/sqladapter.New()`
-- `database/sql.Conn` (e.g. [`github.com/lib/pq`](https://github.com/lib/pq)) - `github.com/vgarvardt/go-pg-adapter/sqladapter.NewConn()`
-- [`github.com/jmoiron/sqlx.DB`](https://github.com/jmoiron/sqlx) - `github.com/vgarvardt/go-pg-adapter/sqladapter.NewX()`
-- [`github.com/jackc/pgx.Conn`](https://github.com/jackc/pgx) (pgx v3) - `github.com/vgarvardt/go-pg-adapter/pgx3adapter.NewConn()`
-- [`github.com/jackc/pgx.ConnPool`](https://github.com/jackc/pgx) (pgx v3) - `github.com/vgarvardt/go-pg-adapter/pgx3adapter.NewConnPool()`
-- [`github.com/jackc/pgx/v4.Conn`](https://github.com/jackc/pgx) (pgx v4) - `github.com/vgarvardt/go-pg-adapter/pgx4adapter.NewConn()`
-- [`github.com/jackc/pgx/v4/pgxpool.Pool`](https://github.com/jackc/pgx) (pgx v4) - `github.com/vgarvardt/go-pg-adapter/pgx4adapter.NewPool()`
+- `database/sql.DB` (e.g. [`github.com/lib/pq`]) - `github.com/vgarvardt/go-pg-adapter/sqladapter.New()`
+- `database/sql.Conn` (e.g. [`github.com/lib/pq`]) - `github.com/vgarvardt/go-pg-adapter/sqladapter.NewConn()`
+- [`github.com/jmoiron/sqlx.DB`] - `github.com/vgarvardt/go-pg-adapter/sqladapter.NewX()`
+- [`github.com/jackc/pgx.Conn`] (pgx v3) - `github.com/vgarvardt/go-pg-adapter/pgx3adapter.NewConn()`
+- [`github.com/jackc/pgx.ConnPool`] (pgx v3) - `github.com/vgarvardt/go-pg-adapter/pgx3adapter.NewConnPool()`
+- [`github.com/jackc/pgx/v4.Conn`] (pgx v4) - `github.com/vgarvardt/go-pg-adapter/pgx4adapter.NewConn()`
+- [`github.com/jackc/pgx/v4/pgxpool.Pool`] (pgx v4) - `github.com/vgarvardt/go-pg-adapter/pgx4adapter.NewPool()`
 
 ## Testing
 
-Linter and tests are running for every Pul Request, but it is possible to run linter
-and tests locally using `docker` and `make`.
+Linter and tests are running for every Pul Request, but it is possible to run linter and tests locally using `docker`
+and `make`.
 
-Run linter: `make link`. This command runs liner in docker container with the project
-source code mounted.
+Run linter: `make link`. This command runs liner in docker container with the project source code mounted.
 
-Run tests: `make test`. This command runs project dependencies in docker containers
-if they are not started yet and runs go tests with coverage.
+Run tests: `make test`. This command runs project dependencies in docker containers if they are not started yet and runs
+go tests with coverage.
 
 ## MIT License
 
 ```
 Copyright (c) 2020 Vladimir Garvardt
 ```
+
+<!-- @formatter:off -->
+[`github.com/lib/pq`]: https://github.com/lib/pq
+[`github.com/jmoiron/sqlx.DB`]: https://github.com/jmoiron/sqlx
+[`github.com/jackc/pgx.Conn`]: https://github.com/jackc/pgx
+[`github.com/jackc/pgx.ConnPool`]: https://github.com/jackc/pgx
+[`github.com/jackc/pgx/v4.Conn`]: https://github.com/jackc/pgx
+[`github.com/jackc/pgx/v4/pgxpool.Pool`]: https://github.com/jackc/pgx
