@@ -66,10 +66,10 @@ func runTests(t *testing.T, adapter pgAdapter.Adapter, table string) {
 
 	query := fmt.Sprintf(`
 CREATE TABLE %[1]s (
-  id         SERIAL      NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL,
-  data       TEXT        NOT NULL,
-  CONSTRAINT %[1]s_pkey PRIMARY KEY (id)
+	id         SERIAL      NOT NULL,
+	created_at TIMESTAMPTZ NOT NULL,
+	data       TEXT        NOT NULL,
+	CONSTRAINT %[1]s_pkey PRIMARY KEY (id)
 )`, table)
 	err := adapter.Exec(context.TODO(), query)
 	require.NoError(t, err)
