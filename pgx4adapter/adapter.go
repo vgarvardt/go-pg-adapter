@@ -5,7 +5,6 @@ import (
 
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
-
 	pgxHelpers "github.com/vgarvardt/pgx-helpers/v4"
 
 	pgAdapter "github.com/vgarvardt/go-pg-adapter"

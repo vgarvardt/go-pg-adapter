@@ -21,11 +21,6 @@ func scanStruct(r *sql.Rows, dest interface{}) error {
 		return errors.New("nil pointer passed to ScanStruct destination")
 	}
 
-	base := v.Type()
-	if base.Kind() == reflect.Ptr {
-		base = base.Elem()
-	}
-
 	columns, err := r.Columns()
 	if err != nil {
 		return err
