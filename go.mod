@@ -6,7 +6,7 @@ require (
 	github.com/jackc/pgx v3.6.2+incompatible
 	github.com/jackc/pgx/v4 v4.18.0
 	github.com/jmoiron/sqlx v1.3.5
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	github.com/vgarvardt/pgx-helpers v0.0.0-20190703163610-cbb413594454
 	github.com/vgarvardt/pgx-helpers/v4 v4.1.0
 )
