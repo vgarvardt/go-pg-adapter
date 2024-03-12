@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/jackc/pgx v3.6.2+incompatible
-	github.com/jackc/pgx/v4 v4.18.2
+	github.com/jackc/pgx/v4 v4.18.3
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/stretchr/testify v1.9.0
 	github.com/vgarvardt/pgx-helpers v0.0.0-20190703163610-cbb413594454
